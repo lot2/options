@@ -29,3 +29,8 @@ def logout():
 @app.route('/session')
 def get_all_session():
     return  render_template("get_sessions.html")
+
+
+@app.route('/outdate')
+def outdate():
+    return  render_template("outdate.html")
