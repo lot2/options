@@ -2,21 +2,37 @@
 <html>
 <head>
     <title>Exchange</title>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script src='{{ url_for('static',filename='JS/modernizr.custom.js') }}'></script>
     <!-- 新 Bootstrap 核心 CSS 文件 -->
     <link rel='stylesheet' href='{{ url_for('static',filename='CSS/bootstrap.min.css') }}'>
     <link rel='stylesheet' href='{{ url_for('static',filename='CSS/dashboard.css') }}'>
+    <link rel="stylesheet" href="{{ url_for('static',filename='CSS/jquery-ui.css') }}">
     <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
     <script src='{{ url_for('static',filename='JS/jquery.min.js') }}'></script>
+    <script src="{{ url_for('static',filename='JS/jquery-ui.js') }}"></script>
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src='{{ url_for('static',filename='JS/bootstrap.min.js') }}'></script>
+     <!-- WARNING: Respond.js doesn't work if you view the page via file://  and the response.js is for @media -->
+    <!--[if lt IE 9]>
+        <script src='{{ url_for('static',filename='JS/respond.src.js') }}'></script>
+    <![endif]-->
 </head>
 <style>
     body {
         padding-top: 70px;
         //font-size: 1.15em;
         //background-color: #eee;
+    }
+    .div_border{
+        width: 230px;
+        padding: 10px;
+        border-radius: 6px;
+        background-color: #eee;
+        color: #444;
+        font-size: 12px;
+        margin-right: 25px;
     }
 </style>
 <script>
@@ -69,7 +85,10 @@
 {#          </ul>#}
 {#        </li>#}
         <li class="dropdown {% if title == 'Option' %}active{% endif %}">
-          <a href="/option" class="dropdown-toggle" data-toggle="dropdown">期权交易</a>
+          <a href="/option" class="dropdown-toggle" data-toggle="dropdown">产品</a>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="/option">期权交易</a></li>
+            </ul>
         </li>
         <li class="dropdown {% if title == 'About' %}active{% endif %}">
           <a href="/about" class="dropdown-toggle" data-toggle="dropdown">关于我们</a>

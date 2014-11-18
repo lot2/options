@@ -1,5 +1,24 @@
 {% extends 'header.html' %}
 {% block content %}
+    <script>
+        function doCheckAll(obj){
+            $("input[id^='chk_pos_']").prop("checked", obj.checked);
+        }
+        $(function(){
+            $("#datepicker").datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
+            var dateInit = new Date();
+            var dayStr = dateInit.getDate() < 10 ? '0'+ dateInit.getDate():dateInit.getDate();
+            var dayMonth = parseInt(dateInit.getMonth())+1 < 10 ? '0'+ (parseInt(dateInit.getMonth())+1):(parseInt(dateInit.getMonth())+1);
+            var days = dateInit.getFullYear()+"-"+dayMonth+"-"+dayStr;
+            $("#datepicker").val(days);
+        });
+        function doNew(){
+            $("#position_new").show();
+            $("#position_list").hide();
+        }
+    </script>
     <div class='container' style="width: 100%">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
@@ -11,7 +30,186 @@
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-                <h1 class="page-header">期权交易</h1>
+                <h2 class="page-header">期权交易</h2>
+                <div>
+                    <table class="table table-noborder">
+                        <tr>
+                            <th>货币对</th>
+                            <th>买</th>
+                            <th>卖</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select class="form-control">
+                                    <option>EUR/USD</option>
+                                    <option>USD/JPY</option>
+                                    <option>AUD/USD</option>
+                                    <option>USD/CHF</option>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" readonly value="1.24719"/>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" readonly value="1.24749"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-primary" style="margin-left: 8px" onclick="doNew()">添加头寸</button>
+                </div>
+                <p></p>
+                <div id="position_list">
+                    <div>
+                        <table class="table table-noborder">
+                            <tr>
+                                <th><input type="checkbox" id="chk_all" onclick="doCheckAll(this)"></th>
+                                <th colspan="4">货币对</th>
+                                <th>到期日</th>
+                                <th>开仓权利金</th>
+                                <th>当前权利金</th>
+                                <th>盈利/亏损</th>
+                                <th>保证金</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="checkbox" id="chk_pos_1"/>
+                                </td>
+                                <td>
+                                    EUR/USD
+                                </td>
+                                <td>
+                                    Call
+                                </td>
+                                <td>
+                                    1.26
+                                </td>
+                                <td>
+                                    100,000.00
+                                </td>
+                                <td>
+                                    24-Nov-14
+                                </td>
+                                <td>
+                                    -397.00 USD
+                                </td>
+                                <td>
+                                    119.15 USD
+                                </td>
+                                <td>
+                                    -277.85 USD
+                                </td>
+                                <td>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <div class="navbar-right">
+                            <button type="button" id="btn_close" disabled class="btn btn-primary btn-lg btn-success" style="margin-top: 20px">关闭已选头寸</button>
+                        </div>
+                        <div class="navbar-right div_border">
+                            <table class="table table-noborder" style="margin-bottom: 0px;">
+                                <tr>
+                                    <th>
+                                        <span id="totalAction">支付:</span>
+                                    </th>
+                                    <td>
+                                    </td>
+                                    <td align="right" id="total1">116.19 USD</td>
+                                </tr>
+                                <tr>
+                                    <th>
+                                        盈利/亏损:
+                                    </th>
+                                    <td>
+                                    </td>
+                                    <td align="right" id="total2">-280.81 USD
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="position_new" style="display: none;">
+                    <div>
+                        <table class="table table-noborder">
+                            <tr>
+                                <th class="text-center">货币对</th>
+                                <th class="text-center">类型</th>
+                                <th class="text-center">履约执行价格</th>
+                                <th class="text-center">到期日</th>
+                                <th class="text-center">金额</th>
+                                <th class="text-center"></th>
+                                <th class="text-center">卖</th>
+                                <th class="text-center"></th>
+                                <th class="text-center">买</th>
+                                <th class="text-center"></th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <select class="form-control">
+                                        <option>EUR/USD</option>
+                                        <option>USD/JPY</option>
+                                        <option>AUD/USD</option>
+                                        <option>USD/CHF</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="form-control">
+                                        <option>Call</option>
+                                        <option>Put</option>
+                                    </select>
+                                </td>
+                                <td width="10%">
+                                    <input type="text" class="form-control" value="+0.54%">
+                                    <div class="text-center">strike 1.25584</div>
+                                </td>
+                                <td width="12%">
+                                    <input type="text" id="datepicker" class="form-control">
+                                    <div class="text-center">7days</div>
+                                </td>
+                                <td width="10%">
+                                    <input type="text" class="form-control" value="100,000">
+                                </td>
+                                <td>
+                                    <span class="glyphicon glyphicon-arrow-right" style="font-size: 25px"></span>
+                                </td>
+                                <td>
+                                    <input type="text" value="270.42 USD" class="form-control">
+                                </td>
+                                <td align="left">
+                                    <input type="checkbox" class="checkbox">
+                                </td>
+                                <td>
+                                    <input type="text" value="270.42 USD" class="form-control">
+                                </td>
+                                <td align="left">
+                                    <input type="checkbox" class="checkbox">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <div class="btn-group"><button type="button" class="btn btn-default btn-lg">取消</button></div>
+                        <div class="navbar-right">
+                            <button type="button" id="btn_close" disabled class="btn btn-primary btn-lg btn-success" style="margin-top: 2px">进行交易</button>
+                        </div>
+                        <div class="navbar-right div_border">
+                            <table class="table table-noborder" style="margin-bottom: 0px;">
+                                <tr>
+                                    <th>
+                                        <span id="totalAction">支付:</span>
+                                    </th>
+                                    <td>
+                                    </td>
+                                    <td align="right" id="total1">116.19 USD</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
