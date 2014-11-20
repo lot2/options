@@ -43,12 +43,13 @@
          clear: left;
          float: left;
         }
-    .div-border{
+    .new-div-border{
         padding: 20px;
         background-color: #fff;
         border-radius: 6px;
         margin: 0 6px;
         box-shadow: 0 0 10px 5px rgba(0,0,0,.2);
+        border: 1px solid #ccc
     }
 </style>
 <script>
@@ -104,6 +105,9 @@
           <a href="/option" class="dropdown-toggle" data-toggle="dropdown">产品</a>
             <ul class="dropdown-menu" role="menu">
                 <li><a href="/option">期权交易</a></li>
+                <li><a href="/currency">货币对</a></li>
+                <li><a href="/commodity">商品</a></li>
+                <li><a href="/option">指数</a></li>
             </ul>
         </li>
         <li class="dropdown {% if title == 'About' %}active{% endif %}">
