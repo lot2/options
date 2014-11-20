@@ -9,14 +9,27 @@
             $("#datepicker").datepicker({
                 dateFormat: 'yy-mm-dd'
             });
+        });
+        function doNew() {
+            //init data
+            $("#new_currency").val($("#init_currency").val());
+            $("#new_type option[value='Call']").attr("selected", true);
+            $("#new_price").val("1.25");
             var dateInit = new Date();
             var theDay = dateInit.getDate() + 7;//默认7天后
             var dayStr = theDay < 10 ? '0' + theDay : theDay;
             var dayMonth = parseInt(dateInit.getMonth()) + 1 < 10 ? '0' + (parseInt(dateInit.getMonth()) + 1) : (parseInt(dateInit.getMonth()) + 1);
             var days = dateInit.getFullYear() + "-" + dayMonth + "-" + dayStr;
             $("#datepicker").val(days);
-        });
-        function doNew() {
+            $("#new_money").val("100000");
+            $("#new_sell").val("270.42 USD");
+            $("#new_buy").val("270.42 USD");
+            $("td[name='td_chk_sell']").removeClass("has-success");
+            $("td[name='td_chk_buy']").removeClass("has-success");
+            $("#id_chk_buy").prop("checked", false);
+            $("#id_chk_sell").prop("checked", false);
+            $("#btn_deal").prop("disabled",true);
+            //init end
             $("#position_new").show();
             $("#position_list").hide();
         }
@@ -25,6 +38,9 @@
             $("#position_new").hide();
         }
         function selectSell(obj){
+            $("td[name='td_chk_sell']").removeClass("has-success");
+            $("td[name='td_chk_buy']").removeClass("has-success");
+            $("#id_chk_buy").prop("checked", false);
             $("#btn_deal").attr("disabled",true);
             if (obj.checked)
             {
@@ -36,6 +52,9 @@
             }
         }
         function selectBuy(obj){
+            $("td[name='td_chk_sell']").removeClass("has-success");
+            $("td[name='td_chk_buy']").removeClass("has-success");
+            $("#id_chk_sell").prop("checked", false);
             $("#btn_deal").attr("disabled",true);
             if (obj.checked)
             {
@@ -54,15 +73,54 @@
                 $("#btn_close").attr("disabled", false);
             }
         }
+        function doDeal(){
+            var currency = $("#new_currency").val();
+            var types = $("#new_type").val();
+            var price = $("#new_price").val();
+            var dates = $("#datepicker").val();
+            var money = $("#new_money").val();
+            var num = $("input[name='chk_pos']").length;
+            var max = 1;
+            if (num == 0) {
+                max = 1
+            } else {
+                max = num + 1
+            }
+            var str = "<tr>"
+                    + "<td><input type=\"checkbox\" id=\"chk_pos_"+max+"\" name=\"chk_pos\" onclick=\"doSelect()\"/></td>"
+                    + "<td>"+currency+"</td>"
+                    + "<td>"+types+"</td>"
+                    + "<td>"+price+"</td>"
+                    + "<td>"+money+"</td>"
+                    + "<td>"+dates+"</td>"
+                    + "<td>-397.00 USD</td>"
+                    + "<td>119.15 USD</td>"
+                    + "<td>-277.85 USD</td>"
+                    + "<td></td>"
+                    + "</tr>";
+            $("#tbl_list").append(str);
+            $("#position_list").show();
+            $("#position_new").hide();
+        }
+        function doClose(){
+            $("input[name='chk_pos']:checked").parent().parent().remove();
+            $("#btn_close").prop("disabled", true);
+        }
+        function chg_curr(obj){
+            $("#init_currency").val(obj.value);
+        }
+        function chg_init(obj){
+            $("#new_currency").val(obj.value);
+        }
     </script>
     <div class='container' style="width: 100%">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li class="active"><a href="#">期权交易</a></li>
-                    <li><a href="#">货币对</a></li>
-                    <li><a href="#">商品</a></li>
-                    <li><a href="#">指数</a></li>
+                    <li class="active"><a href="/option">期权交易</a></li>
+                    <li><a href="/currency">货币对</a></li>
+                    <li><a href="/commodity">商品</a></li>
+                    <li><a href="/exponent">指数</a></li>
                 </ul>
             </div>
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -76,11 +134,11 @@
                         </tr>
                         <tr>
                             <td>
-                                <select class="form-control">
-                                    <option>EUR/USD</option>
-                                    <option>USD/JPY</option>
-                                    <option>AUD/USD</option>
-                                    <option>USD/CHF</option>
+                                <select class="form-control" id="init_currency" onchange="chg_init(this)">
+                                    <option value="EUR/USD">EUR/USD</option>
+                                    <option value="USD/JPY">USD/JPY</option>
+                                    <option value="AUD/USD">AUD/USD</option>
+                                    <option value="USD/CHF">USD/CHF</option>
                                 </select>
                             </td>
                             <td>
@@ -100,7 +158,7 @@
 
                 <div id="position_list">
                     <div>
-                        <table class="table table-noborder">
+                        <table class="table table-noborder" id="tbl_list">
                             <tr>
                                 <th><input type="checkbox" id="chk_all" onclick="doCheckAll(this)"></th>
                                 <th colspan="4">货币对</th>
@@ -127,7 +185,7 @@
                                     100,000.00
                                 </td>
                                 <td>
-                                    24-Nov-14
+                                    2014-11-24
                                 </td>
                                 <td>
                                     -397.00 USD
@@ -189,46 +247,44 @@
                             </tr>
                             <tr>
                                 <td width="15%">
-                                    <select class="form-control">
-                                        <option>EUR/USD</option>
-                                        <option>USD/JPY</option>
-                                        <option>AUD/USD</option>
-                                        <option>USD/CHF</option>
+                                    <select class="form-control" id="new_currency" onchange="chg_curr(this)">
+                                        <option value="EUR/USD">EUR/USD</option>
+                                        <option value="USD/JPY">USD/JPY</option>
+                                        <option value="AUD/USD">AUD/USD</option>
+                                        <option value="USD/CHF">USD/CHF</option>
                                     </select>
                                 </td>
                                 <td width="10%">
-                                    <select class="form-control">
-                                        <option>Call</option>
-                                        <option>Put</option>
+                                    <select class="form-control" id="new_type">
+                                        <option value="Call">Call</option>
+                                        <option value="Put">Put</option>
                                     </select>
                                 </td>
                                 <td width="12%">
-                                    <input type="text" class="form-control" value="+0.54%">
-
-                                    <div class="text-center">strike 1.25584</div>
+                                    <input type="text" class="form-control" value="1.25%" id="new_price">
+                                    <div class="text-center" id="new_strike">strike 1.25584</div>
                                 </td>
                                 <td width="12%">
                                     <input type="text" id="datepicker" class="form-control" readonly style="cursor: pointer">
-
-                                    <div class="text-center">7days</div>
+                                    <div class="text-center" id="new_during">7days</div>
                                 </td>
                                 <td width="12%">
-                                    <input type="text" class="form-control" value="100,000">
+                                    <input type="text" class="form-control" value="100,000" id="new_money">
                                 </td>
                                 <td width="5%">
                                     <span class="glyphicon glyphicon-arrow-right" style="font-size: 25px"></span>
                                 </td>
                                 <td width="15%" name="td_chk_sell">
-                                    <input type="text" value="270.42 USD" class="form-control">
+                                    <input type="text" value="270.42 USD" class="form-control" id="new_sell">
                                 </td>
                                 <td width="2%" align="left" name="td_chk_sell">
-                                    <input type="checkbox" class="my-checkbox" onclick="selectSell(this)">
+                                    <input type="checkbox" class="my-checkbox" id="id_chk_sell" onclick="selectSell(this)">
                                 </td>
                                 <td width="15%" name="td_chk_buy">
-                                    <input type="text" value="270.42 USD" class="form-control">
+                                    <input type="text" value="270.42 USD" class="form-control" id="new_buy">
                                 </td>
                                 <td width="2%" align="left" name="td_chk_buy">
-                                    <input type="checkbox" class="my-checkbox" onclick="selectBuy(this)">
+                                    <input type="checkbox" class="my-checkbox" id="id_chk_buy" onclick="selectBuy(this)">
                                 </td>
                             </tr>
                         </table>
@@ -240,8 +296,8 @@
                             </button>
                         </div>
                         <div class="navbar-right">
-                            <button type="button" id="btn_deal" disabled class="btn btn-primary btn-lg btn-success"
-                                    style="margin-top: 2px" onclick="doDeal()">进行交易
+                            <button type="button" id="btn_deal" class="btn btn-primary btn-lg btn-success"
+                                    style="margin-top: 2px" onclick="doDeal()" disabled>进行交易
                             </button>
                         </div>
                         <div class="navbar-right div_border">
