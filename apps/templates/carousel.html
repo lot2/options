@@ -28,6 +28,7 @@
         $(document).off('click.bs.dropdown.data-api');//可使导航栏的下拉框点击
         //$("li.dropdown .dropdown-toggle span.caret").remove();
         dropdownOpen();
+        //scrollChange();
     });
     function dropdownOpen() {
         //鼠标悬停弹下拉菜单
@@ -38,12 +39,22 @@
             $(this).removeClass('open');
         });
     }
+    function scrollChange(){
+        $(window).scroll(function () {
+            if ($(window).scrollTop() > 0) {
+                $("#header_nav").removeClass("navbar-default-top").addClass("navbar-fixed-top");
+            }
+            else
+            {
+                $("#header_nav").removeClass("navbar-fixed-top").addClass("navbar-default-top");
+            }
+        });
+    }
 </script>
 <body>
     <div class="navbar-wrapper">
       <div class="container">
-
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <nav id="header_nav" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
           <div class="container">
             <div class="navbar-header">
               <button class="navbar-toggle collapsed" aria-expanded="false" aria-controls="navbar" type="button" data-toggle="collapse" data-target="#navbar">
@@ -59,10 +70,11 @@
                 <li class="active"><a href="#">首页</a></li>
                 <li class="dropdown">
                   <a class="dropdown-toggle" aria-expanded="false" href="#" data-toggle="dropdown">LMAX</a>
-                  <ul class="dropdown-menu" role="menu">
+                  <ul class="dropdown-menu" id="myul" role="menu" style="width: 600px">
                     <li><a href="#">LMAX介绍</a></li>
                     <li><a href="#">什么是交易所</a></li>
                     <li><a href="#">LMAX优势</a></li>
+{#                    <div style="float: right;"><img height="80" width="100" src="{{ url_for('static',filename='img/333.png') }}"></div>#}
                   </ul>
                 </li>
                 <li class="dropdown">
